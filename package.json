@@ -1,0 +1,70 @@
+{
+  "name": "mdx-state-machine",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "micromark/mdx-state-machine",
+  "devDependencies": {
+    "github-slugger": "^1.0.0",
+    "mdast-util-to-string": "^1.0.0",
+    "prettier": "^2.0.0",
+    "remark-cli": "^8.0.0",
+    "remark-parse": "^8.0.0",
+    "remark-preset-wooorm": "^7.0.0",
+    "remark-slug": "^6.0.0",
+    "remark-stringify": "^8.0.0",
+    "to-vfile": "^6.0.0",
+    "unified": "^9.0.0",
+    "unist-util-visit-parents": "^3.0.0",
+    "vfile-reporter": "^6.0.0",
+    "xo": "^0.30.0"
+  },
+  "scripts": {
+    "build": "node build",
+    "format": "remark . -qo && prettier --write \"**/*.js\" && xo --fix",
+    "test": "npm run build && npm run format"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "semi": false,
+    "trailingComma": "none"
+  },
+  "xo": {
+    "prettier": true,
+    "esnext": false
+  },
+  "remarkConfig": {
+    "settings": {
+      "commonmark": true
+    },
+    "plugins": [
+      "preset-wooorm",
+      [
+        "lint-no-unneeded-full-reference-link",
+        false
+      ],
+      [
+        "lint-no-html",
+        false
+      ],
+      [
+        "lint-maximum-line-length",
+        false
+      ],
+      [
+        "lint-maximum-heading-length",
+        false
+      ],
+      [
+        "lint-no-undefined-references",
+        false
+      ],
+      [
+        "validate-links",
+        false
+      ]
+    ]
+  }
+}
