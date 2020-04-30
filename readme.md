@@ -202,7 +202,7 @@ The <a id="stack" href="#stack">**stack**</a> is a list of tokens that are open,
 The <a id="current-token" href="#current-token">**current token**</a> is the last token in the [stack][stack].
 
 The <a id="value" href="#value">**value**</a> of a token are all characters in the [input stream][input-stream] from where
-the token was [enter][enter]ed (including) to the [input character][input-character] (excluding).
+the token was [enter][enter]ed (including) to where it [exit][exit]ed (excluding).
 
 The <a id="element-stack" href="#element-stack">**element stack**</a> is a list of elements that are open, initially empty.
 The <a id="current-element" href="#current-element">**current element**</a> is the last element in the [element stack][element-stack].
@@ -214,22 +214,27 @@ off.
 
 The <a id="state" href="#state">**state**</a> is the way a character is handled.
 
-A variable is declared in the `let`, cleared with `unset`, or changed with
-`set`, `increment`, `decrement`, `append`, `push`, or `pop`.
+A variable is declared with `let`, cleared with `unset`, or changed with
+`set` (to set a value), `increment` (to add a numeric value), `decrement` (to
+subtract a numeric value), `append` (to add a string value), `push` (to add a
+value to a list), or `pop` (to remove a value from the end of a list).
 
 Which values are used are left to the host programming language, but this
-specification requires compatibility with **\[JSON]** for primitives (strings,
+definition requires compatibility with **\[JSON]** for primitives (strings,
 numbers, booleans, and null) and structured types (objects and arrays).
 
 The <a id="shared-space" href="#shared-space">**shared space**</a> is an object.
-`size`, `sizeOpen`, and `currentTag` are keys in the [shared space][shared-space].
+`size`, `sizeOpen`, `currentAttribute`, and `currentTag` are variables in the
+[shared space][shared-space].
+These variables are available globally to all states and adapters.
+Other variables are available locally to a state or adapter and not shared.
 
 To <a id="dedent" href="#dedent">**dedent**</a> is to remove up to X initial U+0009 CHARACTER TABULATION (HT) or U+0020 SPACE (SP) characters from each
-non-initial line in the given value, where X is minimum number of HT or U+0020 SPACE (SP)
-characters of all non-initial lines that contain other characters.
+non-initial line in the given value, where X is the minimum number of U+0009 CHARACTER TABULATION (HT) or
+U+0020 SPACE (SP) characters of all non-initial lines that contain other characters.
 
 To <a id="decode" href="#decode">**decode**</a> is to parse character references as defined in “Character
-reference state” in § 12.2 Parsing HTML documents (**\[HTML]**)
+reference state” of § 12.2 Parsing HTML documents (**\[HTML]**).
 
 ### 4.3 Effects
 
@@ -237,7 +242,7 @@ The [MDX state machine][mdx-state-machine] and [MDX adapter][mdx-adapter] have c
 
 #### 4.3.1 Switch
 
-To <a id="switch" href="#switch">**switch**</a> to a state is to wait for the next character in the given state.
+To <a id="switch" href="#switch">**switch**</a> to a state is to wait for a character in the given state.
 
 #### 4.3.2 Consume
 
@@ -247,11 +252,11 @@ character in the [input stream][input-stream].
 #### 4.3.3 Enter
 
 To <a id="enter" href="#enter">**enter**</a> a token is to push a new token of the given type to the [stack][stack],
-making it the new [current token][current-token].
+making it the [current token][current-token].
 
 #### 4.3.4 Exit
 
-To <a id="exit" href="#exit">**exit**</a> a token is to pop the [current token][current-token] from the [stack][stack].
+To <a id="exit" href="#exit">**exit**</a> is to pop the [current token][current-token] from the [stack][stack].
 
 #### 4.3.5 Done
 
@@ -264,9 +269,9 @@ When crashing with a given label, crashing causes a parse error.
 
 ## 5 State machine
 
-The <a id="mdx-state-machine" href="#mdx-state-machine">**MDX state machine**</a> is used to tokenize the MDX blocks and MDX spans.
-Blocks (also known as flow) make up the structure of the document (such as a
-heading), whereas spans (also known as text or inline) make up the
+The <a id="mdx-state-machine" href="#mdx-state-machine">**MDX state machine**</a> is used to tokenize MDX blocks and MDX spans.
+Blocks (also known as flow) make up the structure of the document (such as
+headings), whereas spans (also known as text or inline) make up the
 intra-paragraph parts of the flow (such as emphasis).
 
 The initial state varies based on whether flow or text is parsed, and is
@@ -280,7 +285,7 @@ completion will [switch][switch] to either [*After MDX block state*][s-after-mdx
 *   ↪ **U+0009 CHARACTER TABULATION (HT)**\
     ↪ **U+0020 SPACE (SP)**
 
-    Consume
+    [Consume][consume]
 *   ↪ **Anything else**
 
     [Switch][switch] to [*Before MDX span state*][s-before-mdx-span]
@@ -300,7 +305,7 @@ completion will [switch][switch] to either [*After MDX block state*][s-after-mdx
 *   ↪ **U+0009 CHARACTER TABULATION (HT)**\
     ↪ **U+0020 SPACE (SP)**
 
-    Consume
+    [Consume][consume]
 *   ↪ **[EOF][ceof]**\
     ↪ **U+000A LINE FEED (LF)**\
     ↪ **U+000D CARRIAGE RETURN (CR)**
@@ -321,8 +326,8 @@ completion will [switch][switch] to either [*After MDX block state*][s-after-mdx
     [Switch][switch] to [*Before name state*][s-before-name], [enter][enter] `'tag'`, and [consume][consume]
 *   ↪ **U+007B LEFT CURLY BRACE (`{`)**
 
-    [Switch][switch] to [*Expression state*][s-expression], [enter][enter] `'expression'`, let `size` in the
-    [shared space][shared-space] be `1`, and [consume][consume]
+    [Switch][switch] to [*Expression state*][s-expression], [enter][enter] `'expression'`, let `size` be `1`, and
+    [consume][consume]
 *   ↪ **Anything else**
 
     [Switch][switch] to [*Text state*][s-text] and [enter][enter] `'text'`
@@ -531,8 +536,8 @@ completion will [switch][switch] to either [*After MDX block state*][s-after-mdx
 
     *   ↪ **`1`**
 
-        [Switch][switch] to [*Before attribute state*][s-before-attribute], unset `size` from the [shared
-        space][shared-space], [consume][consume], and [exit][exit]
+        [Switch][switch] to [*Before attribute state*][s-before-attribute], unset `size`, [consume][consume], and
+        [exit][exit]
     *   ↪ **Anything else**
 
         Decrement `size` by `1` and [consume][consume]
@@ -686,8 +691,8 @@ completion will [switch][switch] to either [*After MDX block state*][s-after-mdx
 
     *   ↪ **`1`**
 
-        [Switch][switch] to [*Before attribute state*][s-before-attribute], unset `size` from the [shared
-        space][shared-space], [consume][consume], and [exit][exit]
+        [Switch][switch] to [*Before attribute state*][s-before-attribute], unset `size`, [consume][consume], and
+        [exit][exit]
     *   ↪ **Anything else**
 
         Decrement `size` by `1` and [consume][consume]
@@ -838,14 +843,17 @@ Adapters are defined to handle a token either when a token [enter][enter]s right
 before it’s pushed to the stack, or when a token [exit][exit]s right after it’s
 popped off the stack.
 
+The adapters does not define how to construct a syntax tree, but does provide
+the essentials for that.
+Constructing syntax trees, whether abstract or concrete, is intentionally
+undefined.
+
 ### 6.1 Enter `'tag'` adapter
 
 1.  Let `currentTag` be a new object
-2.  Let `type` of `currentTag` be `'mdxTag'`
-3.  Let `name` of `currentTag` be `null`
-4.  Let `close` of `currentTag` be `false`
-5.  Let `selfClosing` of `currentTag` be `false`
-6.  Let `attributes` of `currentTag` be a new array
+2.  Let `name` of `currentTag` be `null`
+3.  Let `close` of `currentTag` be `false`
+4.  Let `selfClosing` of `currentTag` be `false`
 
 ### 6.2 Enter `'closingSlash'` adapter
 
@@ -877,13 +885,11 @@ Let `name` of `currentTag` be the [value][value] of [current token][current-toke
 
 ### 6.8 Exit `'memberName'` adapter
 
-1.  Append U+002E DOT (`.`) to `name` of `currentTag`
-2.  Append the [value][value] of [current token][current-token] to `name` of `currentTag`
+Append U+002E DOT (`.`) and the [value][value] of [current token][current-token] to `name` of `currentTag`
 
 ### 6.9 Exit `'localName'` adapter
 
-1.  Append U+003A COLON (`:`) to `name` of `currentTag`
-2.  Append the [value][value] of [current token][current-token] to `name` of `currentTag`
+Append U+003A COLON (`:`) and the [value][value] of [current token][current-token] to `name` of `currentTag`
 
 ### 6.10 Exit `'name'` adapter
 
@@ -894,28 +900,23 @@ as `name` of [current element][current-element], [crash][crash] `'on closing tag
 ### 6.11 Exit `'attributeName'` adapter
 
 1.  Let `currentAttribute` be a new object
-2.  Let `type` of `currentAttribute` be `'mdxAttribute'`
-3.  Let `name` of `currentAttribute` be the [value][value] of [current token][current-token]
-4.  Let `value` of `currentAttribute` be `null`
-5.  Push `currentAttribute` to `attributes` of `currentTag`
+2.  Let `name` of `currentAttribute` be the [value][value] of [current token][current-token]
+3.  Let `value` of `currentAttribute` be `null`
 
 ### 6.12 Exit `'attributeLocalName'` adapter
 
-1.  Let `currentAttribute` be the last value in `attributes` of `currentTag`
-2.  Append U+003A COLON (`:`) to `name` of `currentAttribute`
-3.  Append the [value][value] of [current token][current-token] to `name` of `currentAttribute`
+Append U+003A COLON (`:`) and the [value][value] of [current token][current-token] to `name` of
+`currentAttribute`
 
 ### 6.13 Exit `'attributeValue'` adapter
 
-1.  Let `currentAttribute` be the last value in `attributes` of `currentTag`
-2.  Let `value` of `currentAttribute` be the [decode][decode]d [value][value], excluding
-    its first and last characters, of [current token][current-token]
+Let `value` of `currentAttribute` be the [decode][decode]d [value][value], excluding its
+first and last characters, of [current token][current-token]
 
 ### 6.14 Exit `'attributeValueExpression'` adapter
 
-1.  Let `currentAttribute` be the last value in `attributes` of `currentTag`
-2.  Let `value` of `currentAttribute` be the [dedent][dedent]ed [value][value], excluding
-    its first and last characters, of [current token][current-token]
+Let `value` of `currentAttribute` be the [dedent][dedent]ed [value][value], excluding its
+first and last characters, of [current token][current-token]
 
 ### 6.15 Exit `'attributeExpression'` adapter
 
@@ -923,7 +924,6 @@ as `name` of [current element][current-element], [crash][crash] `'on closing tag
 2.  Let `type` of `currentAttribute` be `'mdxAttributeExpression'`
 3.  Let `value` of `currentAttribute` be the [dedent][dedent]ed [value][value], excluding
     its first and last characters, of [current token][current-token]
-4.  Push `currentAttribute` to `attributes` of `currentTag`
 
 ### 6.16 Exit `'selfClosingSlash'` adapter
 
@@ -932,10 +932,12 @@ Let `selfClosing` of `currentTag` be `true`
 ### 6.17 Exit `'tag'` adapter
 
 > **Note**: if there is no [current element][current-element], the [input character][input-character] is the
-> start of the element’s content, which should be used to parse it.
+> start of the element’s content.
 > If `close` of `currentTag` is `true`, and there is a single value in
 > the [element stack][element-stack], the first character of the token is the end of the
-> element’s content, which should be used to parse it.
+> element’s content.
+> The content should be parsed further by the host parser to find nested MDX
+> constructs.
 
 1.  If `close` of `currentTag` is `true`, pop the [current element][current-element] from the
     [element stack][element-stack]
@@ -950,7 +952,7 @@ Finally, if there is no [current element][current-element], [switch][switch] to 
 > **Note**: if there is no [current element][current-element], the first character after the
 > start of the token is the start of the expression’s content, and the last
 > character before the end of the token is the end of the expression’s content.
-> Both should be used to parse it.
+> The content could be parsed by the host parser.
 
 If there is no [current element][current-element], [switch][switch] to either [*After MDX block state*][s-after-mdx-block] or
 [*After MDX span state*][s-after-mdx-span], based on whether flow or text is parsed.
@@ -959,8 +961,8 @@ If there is no [current element][current-element], [switch][switch] to either [*
 
 ### 7.1 Syntax
 
-The syntax of MDX is described in [W3C Backus–Naur form][w3c-bnf], but we’re
-using the following additions:
+The syntax of MDX is described in [W3C Backus–Naur form][w3c-bnf] with the
+following additions:
 
 1.  **`A - B`** — matches any string that matches `A` but does not match `B`.
 2.  **`'string'`** — same as **`"string"`** but with single quotes.
@@ -1059,8 +1061,8 @@ The syntax of MDX is defined as follows, however, do note that interleaving
 
 ### 7.2 Deviations from Markdown
 
-MDX adds certain constructs to Markdown, but for reasons which will be described
-in following sections, certain constructs in Markdown are not supported:
+MDX adds constructs to Markdown but also prohibits certain normal Markdown
+constructs.
 
 #### 7.2.1 HTML
 
@@ -1134,7 +1136,7 @@ Whereas all Markdown is valid, incorrect MDX will crash.
 ### 7.3 Deviations from JSX
 
 MDX removes certain constructs from JSX, because JSX is typically mixed with
-JavaScript, but MDX is usable without it.
+JavaScript whereas MDX is usable without it.
 
 #### 7.3.1 Comments
 
