@@ -973,90 +973,90 @@ The syntax of MDX is defined as follows, however, do note that interleaving
 (mixing) of Markdown and MDX is defined elsewhere.
 
 <pre><code>; Entries
-<a id=mdx-block href=#mdx-block>mdxBlock</a> ::= *<a href=#space-or-tab>spaceOrTab</a> (<a href=#element>element</a> | <a href=#expression>expression</a>) *<a href=#space-or-tab>spaceOrTab</a> BREAK
-<a id=mdx-span href=#mdx-span>mdxSpan</a> ::= <a href=#element>element</a> | <a href=#expression>expression</a>
+<a id=x-mdx-block href=#x-mdx-block>mdxBlock</a> ::= *<a href=#x-space-or-tab>spaceOrTab</a> (<a href=#x-element>element</a> | <a href=#x-expression>expression</a>) *<a href=#x-space-or-tab>spaceOrTab</a> BREAK
+<a id=x-mdx-span href=#x-mdx-span>mdxSpan</a> ::= <a href=#x-element>element</a> | <a href=#x-expression>expression</a>
 
-<a id=element href=#element>element</a> ::= <a href=#self-closing>selfClosing</a> | <a href=#closed>closed</a>
-<a id=self-closing href=#self-closing>selfClosing</a> ::=
+<a id=x-element href=#x-element>element</a> ::= <a href=#x-self-closing>selfClosing</a> | <a href=#x-closed>closed</a>
+<a id=x-self-closing href=#x-self-closing>selfClosing</a> ::=
   ; constraint: tag MUST be named, MUST NOT be closing, and MUST be self-closing
-  <a href=#tag>tag</a>
-<a id=closed href=#closed>closed</a> ::=
+  <a href=#x-tag>tag</a>
+<a id=x-closed href=#x-closed>closed</a> ::=
   ; constraint: tag MUST NOT be closing and MUST NOT be self-closing
-  <a href=#tag>tag</a>
-  *<a href=#data>data</a>
+  <a href=#x-tag>tag</a>
+  *<a href=#x-data>data</a>
   ; constraint: tag MUST be closing, MUST NOT be self-closing, MUST not have
   ; attributes, and either both tags MUST have the same name or both tags MUST
   ; be nameless
-  <a href=#tag>tag</a>
+  <a href=#x-tag>tag</a>
 
-<a id=data href=#data>data</a> ::= <a href=#expression>expression</a> | <a href=#element>element</a> | <a href=#tick-quoted>tickQuoted</a> | <a href=#tilde-quoted>tildeQuoted</a> | <a href=#text>text</a>
+<a id=x-data href=#x-data>data</a> ::= <a href=#x-expression>expression</a> | <a href=#x-element>element</a> | <a href=#x-tick-quoted>tickQuoted</a> | <a href=#x-tilde-quoted>tildeQuoted</a> | <a href=#x-text>text</a>
 
-<a id=tag href=#tag>tag</a> ::=
-  '<' *1<a href=#closing>closing</a>
-  *1(*<a href=#whitespace>whitespace</a> <a href=#name>name</a> *1<a href=#attributes-after-identifier>attributesAfterIdentifier</a> *1<a href=#closing>closing</a>)
-  *<a href=#whitespace>whitespace</a> '>'
+<a id=x-tag href=#x-tag>tag</a> ::=
+  '<' *1<a href=#x-closing>closing</a>
+  *1(*<a href=#x-whitespace>whitespace</a> <a href=#x-name>name</a> *1<a href=#x-attributes-after-identifier>attributesAfterIdentifier</a> *1<a href=#x-closing>closing</a>)
+  *<a href=#x-whitespace>whitespace</a> '>'
 
-<a id=attributes-after-identifier href=#attributes-after-identifier>attributesAfterIdentifier</a> ::=
-  1*<a href=#whitespace>whitespace</a> (<a href=#attributes-boolean>attributesBoolean</a> | <a href=#attributes-value>attributesValue</a>) |
-  *<a href=#whitespace>whitespace</a> <a href=#attributes-expression>attributesExpression</a> |
-<a id=attributes-after-value href=#attributes-after-value>attributesAfterValue</a> ::=
-  *<a href=#whitespace>whitespace</a> (<a href=#attributes-boolean>attributesBoolean</a> | <a href=#attributes-expression>attributesExpression</a> | <a href=#attributes-value>attributesValue</a>)
-<a name=attributes-boolean href=#attributes-boolean>attributesBoolean</a> ::= <a href=#key>key</a> *1<a href=#attributes-after-identifier>attributesAfterIdentifier</a>
-<a name=attributes-expression href=#attributes-expression>attributesExpression</a> ::= <a href=#expression>expression</a> *1<a href=#attributes-after-value>attributesAfterValue</a>
-<a name=attributes-value href=#attributes-value>attributesValue</a> ::= <a href=#key>key</a> <a href=#initializer>initializer</a> *1<a href=#attributes-after-value>attributesAfterValue</a>
+<a id=x-attributes-after-identifier href=#x-attributes-after-identifier>attributesAfterIdentifier</a> ::=
+  1*<a href=#x-whitespace>whitespace</a> (<a href=#x-attributes-boolean>attributesBoolean</a> | <a href=#x-attributes-value>attributesValue</a>) |
+  *<a href=#x-whitespace>whitespace</a> <a href=#x-attributes-expression>attributesExpression</a> |
+<a id=x-attributes-after-value href=#x-attributes-after-value>attributesAfterValue</a> ::=
+  *<a href=#x-whitespace>whitespace</a> (<a href=#x-attributes-boolean>attributesBoolean</a> | <a href=#x-attributes-expression>attributesExpression</a> | <a href=#x-attributes-value>attributesValue</a>)
+<a name=attributes-boolean href=#x-attributes-boolean>attributesBoolean</a> ::= <a href=#x-key>key</a> *1<a href=#x-attributes-after-identifier>attributesAfterIdentifier</a>
+<a name=attributes-expression href=#x-attributes-expression>attributesExpression</a> ::= <a href=#x-expression>expression</a> *1<a href=#x-attributes-after-value>attributesAfterValue</a>
+<a name=attributes-value href=#x-attributes-value>attributesValue</a> ::= <a href=#x-key>key</a> <a href=#x-initializer>initializer</a> *1<a href=#x-attributes-after-value>attributesAfterValue</a>
 
-<a id=closing href=#closing>closing</a> ::= *<a href=#whitespace>whitespace</a> '/'
+<a id=x-closing href=#x-closing>closing</a> ::= *<a href=#x-whitespace>whitespace</a> '/'
 
-<a id=name href=#name>name</a> ::= <a href=#identifier>identifier</a> *1(<a href=#local>local</a> | <a href=#members>members</a>)
-<a id=key href=#key>key</a> ::= <a href=#identifier>identifier</a> *1<a href=#local>local</a>
-<a id=local href=#local>local</a> ::= *<a href=#whitespace>whitespace</a> ':' *<a href=#whitespace>whitespace</a> <a href=#identifier>identifier</a>
-<a id=members href=#members>members</a> ::= <a href=#member>member</a> *<a href=#member>member</a>
-<a id=member href=#member>member</a> ::= *<a href=#whitespace>whitespace</a> '.' *<a href=#whitespace>whitespace</a> <a href=#identifier>identifier</a>
+<a id=x-name href=#x-name>name</a> ::= <a href=#x-identifier>identifier</a> *1(<a href=#x-local>local</a> | <a href=#x-members>members</a>)
+<a id=x-key href=#x-key>key</a> ::= <a href=#x-identifier>identifier</a> *1<a href=#x-local>local</a>
+<a id=x-local href=#x-local>local</a> ::= *<a href=#x-whitespace>whitespace</a> ':' *<a href=#x-whitespace>whitespace</a> <a href=#x-identifier>identifier</a>
+<a id=x-members href=#x-members>members</a> ::= <a href=#x-member>member</a> *<a href=#x-member>member</a>
+<a id=x-member href=#x-member>member</a> ::= *<a href=#x-whitespace>whitespace</a> '.' *<a href=#x-whitespace>whitespace</a> <a href=#x-identifier>identifier</a>
 
-<a id=identifier href=#identifier>identifier</a> ::= <a href=#identifier-start>identifierStart</a> *<a href=#identifier-part>identifierPart</a>
-<a id=initializer href=#initializer>initializer</a> ::= *<a href=#whitespace>whitespace</a> '=' *<a href=#whitespace>whitespace</a> <a href=#value>value</a>
-<a id=value href=#value>value</a> ::= <a href=#double-quoted>doubleQuoted</a> | <a href=#single-quoted>singleQuoted</a> | <a href=#expression>expression</a>
-<a id=expression href=#expression>expression</a> ::= '{' *(<a href=#expression-text>expressionText</a> | <a href=#expression>expression</a>) '}'
+<a id=x-identifier href=#x-identifier>identifier</a> ::= <a href=#x-identifier-start>identifierStart</a> *<a href=#x-identifier-part>identifierPart</a>
+<a id=x-initializer href=#x-initializer>initializer</a> ::= *<a href=#x-whitespace>whitespace</a> '=' *<a href=#x-whitespace>whitespace</a> <a href=#x-value>value</a>
+<a id=x-value href=#x-value>value</a> ::= <a href=#x-double-quoted>doubleQuoted</a> | <a href=#x-single-quoted>singleQuoted</a> | <a href=#x-expression>expression</a>
+<a id=x-expression href=#x-expression>expression</a> ::= '{' *(<a href=#x-expression-text>expressionText</a> | <a href=#x-expression>expression</a>) '}'
 
-<a id=tick-quoted href=#tick-quoted>tickQuoted</a> ::=
-  <a href=#tick-fence>tickFence</a>
+<a id=x-tick-quoted href=#x-tick-quoted>tickQuoted</a> ::=
+  <a href=#x-tick-fence>tickFence</a>
   ; constraint: nested fence MUST NOT be the same size as the opening fence
-  *(<a href=#tick-text>tickText</a> | <a href=#tick-fence>tickFence</a>)
+  *(<a href=#x-tick-text>tickText</a> | <a href=#x-tick-fence>tickFence</a>)
   ; constraint: closing fence MUST be the same size as the opening fence
-  <a href=#tick-fence>tickFence</a>
-<a id=tilde-quoted href=#tilde-quoted>tildeQuoted</a> ::=
-  <a href=#tilde-fence>tildeFence</a>
+  <a href=#x-tick-fence>tickFence</a>
+<a id=x-tilde-quoted href=#x-tilde-quoted>tildeQuoted</a> ::=
+  <a href=#x-tilde-fence>tildeFence</a>
   ; constraint: nested fence MUST NOT be the same size as the opening fence
-  *(<a href=#tilde-text>tildeText</a> | <a href=#tilde-fence>tildeFence</a>)
+  *(<a href=#x-tilde-text>tildeText</a> | <a href=#x-tilde-fence>tildeFence</a>)
   ; constraint: closing fence MUST be the same size as the opening fence
-  <a href=#tilde-fence>tildeFence</a>
-<a id=tick-fence href=#tick-fence>tickFence</a> ::= 1*'`'
-<a id=tilde-fence href=#tilde-fence>tildeFence</a> ::= 1*'~'
-<a id=double-quoted href=#double-quoted>doubleQuoted</a> ::= '"' *<a href=#double-quoted-text>doubleQuotedText</a> '"'
-<a id=single-quoted href=#single-quoted>singleQuoted</a> ::= "'" *<a href=#single-quoted-text>singleQuotedText</a> "'"
+  <a href=#x-tilde-fence>tildeFence</a>
+<a id=x-tick-fence href=#x-tick-fence>tickFence</a> ::= 1*'`'
+<a id=x-tilde-fence href=#x-tilde-fence>tildeFence</a> ::= 1*'~'
+<a id=x-double-quoted href=#x-double-quoted>doubleQuoted</a> ::= '"' *<a href=#x-double-quoted-text>doubleQuotedText</a> '"'
+<a id=x-single-quoted href=#x-single-quoted>singleQuoted</a> ::= "'" *<a href=#x-single-quoted-text>singleQuotedText</a> "'"
 
-<a id=space-or-tab href=#space-or-tab>spaceOrTab</a> ::= " " | "\t"
-<a id=text href=#text>text</a> ::= <a href=#character>character</a> - '<' - '{' - '`' - '~'
-<a id=whitespace href=#whitespace>whitespace</a> ::= <a href=#es-whitespace>esWhitespace</a>
-<a id=double-quoted-text href=#double-quoted-text>doubleQuotedText</a> ::= <a href=#character>character</a> - '"'
-<a id=single-quoted-text href=#single-quoted-text>singleQuotedText</a> ::= <a href=#character>character</a> - "'"
-<a id=tick-text href=#tick-text>tickText</a> ::= <a href=#character>character</a> - '`'
-<a id=tilde-text href=#tilde-text>tildeText</a> ::= <a href=#character>character</a> - '~'
-<a id=expression-text href=#expression-text>expressionText</a> ::= <a href=#character>character</a> - '{' - '}'
-<a id=identifier-start href=#identifier-start>identifierStart</a> ::= <a href=#es-identifier-start>esIdentifierStart</a>
-<a id=identifier-part href=#identifier-part>identifierPart</a> ::= <a href=#es-identifier-part>esIdentifierPart</a> | '-'
+<a id=x-space-or-tab href=#x-space-or-tab>spaceOrTab</a> ::= " " | "\t"
+<a id=x-text href=#x-text>text</a> ::= <a href=#x-character>character</a> - '<' - '{' - '`' - '~'
+<a id=x-whitespace href=#x-whitespace>whitespace</a> ::= <a href=#x-es-whitespace>esWhitespace</a>
+<a id=x-double-quoted-text href=#x-double-quoted-text>doubleQuotedText</a> ::= <a href=#x-character>character</a> - '"'
+<a id=x-single-quoted-text href=#x-single-quoted-text>singleQuotedText</a> ::= <a href=#x-character>character</a> - "'"
+<a id=x-tick-text href=#x-tick-text>tickText</a> ::= <a href=#x-character>character</a> - '`'
+<a id=x-tilde-text href=#x-tilde-text>tildeText</a> ::= <a href=#x-character>character</a> - '~'
+<a id=x-expression-text href=#x-expression-text>expressionText</a> ::= <a href=#x-character>character</a> - '{' - '}'
+<a id=x-identifier-start href=#x-identifier-start>identifierStart</a> ::= <a href=#x-es-identifier-start>esIdentifierStart</a>
+<a id=x-identifier-part href=#x-identifier-part>identifierPart</a> ::= <a href=#x-es-identifier-part>esIdentifierPart</a> | '-'
 
 ; Unicode
 ; Any unicode code point
-<a id=character href=#character>character</a> ::=
+<a id=x-character href=#x-character>character</a> ::=
 
 ; ECMAScript
 ; See “IdentifierStart”: &lt;<a href=https://tc39.es/ecma262/#prod-IdentifierStart>https://tc39.es/ecma262/#prod-IdentifierStart</a>>
-<a id=es-identifier-start href=#es-identifier-start>esIdentifierStart</a> ::=
+<a id=x-es-identifier-start href=#x-es-identifier-start>esIdentifierStart</a> ::=
 ; See “IdentifierPart”: &lt;<a href=https://tc39.es/ecma262/#prod-IdentifierPart>https://tc39.es/ecma262/#prod-IdentifierPart</a>>
-<a id=es-identifier-part href=#es-identifier-part>esIdentifierPart</a> ::=
+<a id=x-es-identifier-part href=#x-es-identifier-part>esIdentifierPart</a> ::=
 ; See “Whitespace”: &lt;<a href=https://tc39.es/ecma262/#prod-WhiteSpace>https://tc39.es/ecma262/#prod-WhiteSpace</a>>
-<a id=es-whitespace href=#es-whitespace>esWhitespace</a> ::=
+<a id=x-es-whitespace href=#x-es-whitespace>esWhitespace</a> ::=
 </code></pre>
 
 ### 7.2 Deviations from Markdown
