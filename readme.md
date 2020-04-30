@@ -94,10 +94,10 @@ that) by describing how to parse it.
 ### 1.2 Who created MDX?
 
 The idea of combining [Markdown][commonmark], [JavaScript][javascript], and [JSX][jsx] was
-thought up by both [Guillermo Rauch][mdx-rauchg] (**[@rauchg][rauchg]**) and [James K.
-Nelson][mdx-jamesknelson] (**[@jamesknelson][jamesknelson]**).
-A popular version of MDX was initially [implemented by John Otander][mdx-johno]
-(**[@johno][johno]**).
+a collaborative effort by [Guillermo Rauch][mdx-rauchg] (**[@rauchg][rauchg]**),
+[James K. Nelson][mdx-jamesknelson] (**[@jamesknelson][jamesknelson]**), [John
+Otander][mdx-johno] (**[@johno][johno]**), Tim Neutkens (**[@timneutkens][timneutkens]**),
+Brent Jackson (**[@jxnblk][jxnblk]**), Jessica Stokes (**[@ticky][ticky]**), and more.
 Markdown was [created by John Gruber][md] (**[@gruber][gruber]**).
 [CommonMark by John McFarlane et al.][commonmark] (**[@jgm][jgm]**) is a popular
 variant.
@@ -1337,6 +1337,12 @@ This work is licensed under a
 [jamesknelson]: https://github.com/jamesknelson
 
 [johno]: https://github.com/johno
+
+[timneutkens]: https://github.com/timneutkens
+
+[jxnblk]: https://github.com/jxnblk
+
+[ticky]: https://github.com/ticky
 
 [gruber]: https://github.com/gruber
 
