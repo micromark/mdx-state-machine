@@ -15,6 +15,11 @@
     *   [1.3 Why MDX?](#13-why-mdx)
 *   [2 Overview](#2-overview)
 *   [3 MDX](#3-mdx)
+    *   [3.1 Hello World](#31-hello-world)
+    *   [3.2 Markdown](#32-markdown)
+    *   [3.3 JSX](#33-jsx)
+    *   [3.4 MDX](#34-mdx)
+    *   [3.5 Syntax](#35-syntax)
 *   [4 Parsing](#4-parsing)
     *   [4.1 Characters](#41-characters)
     *   [4.2 Infra](#42-infra)
@@ -137,12 +142,434 @@ JSX is great, amongst other things, because:
 
 ## 2 Overview
 
-TODO: some stuff about a part for authors (next section) and a part for
-developers (rest of doc).
+This document first talks about the MDX syntax for authors, in the following
+section.
+Further sections define the syntax in-depth and for developers.
+The appendix includes sections on notable differences from Markdown and JSX,
+and a list of common MDX gotchas.
 
 ## 3 MDX
 
-TODO: MDX for authors.
+This section explains MDX for authors.
+
+### 3.1 Hello World
+
+The smallest MDX example looks like this:
+
+```markdown
+# Hello, world!
+```
+
+It displays a heading saying “Hello, world!” on the page.
+With MDX you can add components:
+
+```jsx
+<MyComponent># Hello, world!</MyComponent>
+```
+
+MDX syntax can be boiled down to being JSX in Markdown.
+It’s a superset of Markdown syntax that supports JSX.
+
+### 3.2 Markdown
+
+Traditionally, Markdown is used to generate HTML.
+Many developers like writing markup in Markdown as it often looks more like
+what’s intended and it is typically terser.
+Instead of the following HTML:
+
+```html
+<blockquote>
+  <p>A block quote with <em>some</em> emphasis.</p>
+</blockquote>
+```
+
+You can write the equivalent in Markdown (or MDX) like so:
+
+```markdown
+> A block quote with _some_ emphasis.
+```
+
+Markdown is good for **content**.
+MDX supports [most standard Markdown syntax][markdown-deviations].
+It’s important to understand Markdown in order to learn MDX.
+
+### 3.3 JSX
+
+Recently, more and more developers have started using [JSX][jsx] to generate HTML
+markup.
+JSX is typically combined with a frontend framework like React or Vue.
+These frameworks add support for components, which let you change repeating
+things like the following markup:
+
+```html
+<h2>Hello, Venus!</h2>
+<h2>Hello, Mars!</h2>
+```
+
+…to JSX (or MDX) like this:
+
+```jsx
+<Welcome name="Venus" />
+<Welcome name="Mars" />
+```
+
+JSX is good for **components**.
+It makes repeating things more clear and allows for separation of concerns.
+MDX supports [most standard JSX syntax][jsx-deviations].
+
+### 3.4 MDX
+
+MDX is the combination of Markdown and JSX, for example, like so:
+
+````mdx
+<MyComponent>> Block quote</MyComponent>
+
+<MyCodeComponent>
+  ```html
+  <!doctype html>
+  ```
+</MyCodeComponent>
+
+<MyOtherComponent>
+  # Heading<Footnote id="1" />
+
+  - List
+  - Items
+</MyOtherComponent>
+
+<Image
+  alt='Photo of Lilo sitting in a tiny box'
+  src='lilo.png'
+/>
+
+<also-component {attribute expression} />
+
+<math value={attribute value expression} />
+
+{
+  block expression
+}
+
+The sum of `1 + 1` as calculated by an inline expression is {1 + 1}.
+````
+
+### 3.5 Syntax
+
+The syntax of MDX within Markdown is formally defined by how to parse in [§ 4
+Parsing][parsing] and in further sections, relatively formally in [§ 7.1
+Syntax][syntax]), and informally by example here.
+
+As MDX is not tied to HTML or JavaScript, the following examples do not show
+output examples in HTML, but instead show whether they are okay, or whether they
+crash.
+
+For ease of reading, block elements will be capitalized, whereas span elements
+will be lowercase, in the following examples.
+But, casing does not affect parsing.
+
+#### 3.5.1 Block
+
+A block of MDX is an element or expression that is both the first thing on its
+opening line, and the last thing on its closing line.
+
+A self-closing block tag:
+
+```mdx
+<Component />
+```
+
+The start and end can be on different lines:
+
+```mdx
+<Component
+/>
+```
+
+An arbitrary number of lines can be between the start and end:
+
+```mdx
+<Component
+
+/>
+```
+
+This also applies to elements with opening and closing tags:
+
+```mdx
+<Component>
+
+
+</Component>
+```
+
+Expressions can also be blocks:
+
+```mdx
+{
+
+
+}
+```
+
+Parent containers of components don’t count when figuring out if something is
+the first or last thing, such as in a block quote, a list, or in another block
+component:
+
+```mdx
+> <Component />
+
+- <Component />
+
+<Parent>
+  <Child />
+</Parent>
+```
+
+#### 3.5.2 Span
+
+A span of MDX is an element or expression that is not a block: it’s either not
+the first thing, or the last thing, or both:
+
+```mdx
+This span is preceded by other things: <component />
+
+<component /> This span is followed by other things.
+
+These rules also apply to expressions ({ such as this one }).
+```
+
+#### 3.5.3 Content
+
+An MDX block element can contain further Markdown blocks, whereas an MDX span
+element can contain further Markdown spans.
+
+On a single line:
+
+```mdx
+<Component>> Block quote</Component>
+```
+
+With generous whitespace:
+
+```mdx
+<Component>
+> Block quote
+</Component>
+```
+
+With indentation:
+
+```mdx
+<Component>
+  > Block quote
+</Component>
+```
+
+Spans cannot contain blocks:
+
+```mdx
+<component>> this is not a block quote</component>, because it’s not in a block
+element.
+
+Nor is this a <component># heading</component>
+```
+
+Blocks will create paragraphs:
+
+```mdx
+<Component>**Strongly important paragraph in a component**.</Component>
+
+This <component>**is strongly important text in a component**</component> in a
+paragraph.
+```
+
+Which gets a bit confusing if you are expected HTML semantics (to MDX, elements
+don’t have semantics, so `h2` has no special meaning):
+
+```mdx
+<h2>And this is a paragraph in a heading!</h2>
+```
+
+MDX expressions can contain arbitrary data, with the exception that there must
+be a matching number opening braces (U+007B LEFT CURLY BRACE (`{`)) and closing braces (U+007D RIGHT CURLY BRACE (`}`)):
+
+```mdx
+{
+  This is a fine expression: no opening or closing braces
+}
+
+So is this: {{{}}}.
+
+And this, an expression with extra closing braces after it: {}}}.
+```
+
+This example is incorrect, as there are not enough closing braces:
+
+```mdx
+{{{}.
+```
+
+#### 3.5.4 Closing MDX
+
+MDX elements and expressions must be closed, and what closes them must be in an
+expected place:
+
+This example is incorrect, an unclosed tag:
+
+```mdx
+<Component>
+```
+
+This example is incorrect, because the “closing” tag is in fenced code.
+
+````mdx
+<Component>
+
+```js
+</Component>
+```
+````
+
+This example is incorrect, because the “closing” tag is outside of the block
+quote:
+
+```mdx
+> <Component>
+
+</Component>
+```
+
+This example is incorrect, because the “closing” tag is not in the paragraph:
+
+```mdx
+A span component <component>
+
+</component>
+```
+
+This example is incorrect, because the “closing” tag is in a different
+paragraph:
+
+```mdx
+<component>This is one paragraph, with an inline opening tag.
+
+This is another paragraph, with an inline closing tag</component>.
+```
+
+The same rules apply to expressions:
+
+```mdx
+{This is all fine…
+
+…but because there is a dot after the closing brace, it’s not a block, which
+results in two paragraphs, which means that the first paragraph has an unclosed
+expression}.
+```
+
+#### 3.5.5 Attributes
+
+MDX elements can have three types of attributes.
+
+Attribute expressions:
+
+```mdx
+<Component {attribute expression} />
+```
+
+Boolean attributes:
+
+```mdx
+<Component boolean another />
+```
+
+Or initialized attributes, with a value.
+
+```mdx
+<Component key="value" other="more" />
+```
+
+Attribute values can also use single quotes:
+
+```mdx
+<Component quotes='single quotes: also known as apostrophes' />
+```
+
+Finally, attribute value expressions can be used with braces:
+
+```mdx
+<Component data={attribute value expression} />
+```
+
+#### 3.5.6 Names
+
+Element names are optional, which is a feature called “fragments”:
+
+```mdx
+<>Fragment block with a paragraph</>
+
+A <>fragment span</> in a paragraph.
+```
+
+The syntax of the name of an element follows the syntax of variables in
+JavaScript, and dashes are also allowed (but not at the start):
+
+```mdx
+This is fine: <π />.
+
+Also fine: <a‌b /> (there’s a zero-width non-joiner in there).
+
+Dashes are <c-d /> fine too!
+```
+
+Names can be prefixed with a namespace using a colon:
+
+```mdx
+<svg:rect />
+```
+
+Similar to namespaces, dots can be used to access methods from objects:
+
+```mdx
+<org.acme.example />
+```
+
+(Namespaces and methods cannot be combined).
+
+#### 3.5.7 Keys
+
+Similar to names, keys of attributes also follow the same syntax as JavaScript
+variables, and dashes are also allowed:
+
+```mdx
+This is all fine: <x π a‌b c-d />.
+```
+
+And namespaces can also be used:
+
+```mdx
+This is all fine: <z xml:lang="de" />.
+```
+
+(Methods don’t work for keys).
+
+#### 3.5.8 Whitespace
+
+Whitespace is mostly optional, except between two identifiers (such as the
+name and a key, or between two keys):
+
+```mdx
+This is fine: <x/>.
+Also fine: <x{attribute expression}/>.
+Fine too: <v w=""x=''y z/>.
+```
+
+Most places accept whitespace:
+
+```mdx
+A bit much, but sure: < w / >.
+< x >Go ahead< / x >
+< z do your = 'thing' >
+```
 
 ## 4 Parsing
 
@@ -1359,6 +1786,14 @@ This work is licensed under a
 [micromark]: https://github.com/micromark/micromark
 
 [cmsm]: https://github.com/micromark/common-markup-state-machine
+
+[markdown-deviations]: #72-deviations-from-markdown
+
+[jsx-deviations]: #73-deviations-from-jsx
+
+[parsing]: #4-parsing
+
+[syntax]: #71-syntax
 
 [whitespace]: #whitespace
 
