@@ -593,6 +593,9 @@ How MDX, whether it’s found or not, is handled is intentionally undefined and
 left up to the host parser.
 When to feed an [EOF][ceof] is similarly undefined.
 
+Host parsers must not support indented code and autlinks, as those conflict with
+MDX.
+
 ### 4.1 Characters
 
 A character is a Unicode code point and is represented as a four to six digit
