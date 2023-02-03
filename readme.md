@@ -1703,6 +1703,76 @@ Here’s a cute photo of my cat:
   /
 >
 ```
+   
+#### 7.4.3 Mixing inline and blocks
+   
+In MDX JSX content can either be inline
+   
+```markdown
+<div>Hello world</div>
+```
+   
+or a block.
+   
+```markdown
+<div>
+   Hello world
+</div>
+```
+   
+The following is a mix of inline and block JSX content, and will produce a syntax error:
+
+Incorrect:
+
+```markdown
+<div>Hello world
+</div>
+```
+   
+This can cause problems when writing JSX with children data on the same and multiple lines.
+
+Incorrect:
+
+Inner content with multiple lines is written on the same line as the tag.
+   
+```markdown
+<MyList>{[
+   { name: "foo", age: 21 },
+   { name: "bar", age: 30 },
+]}</MyList>
+```
+
+Correct:
+
+All inner content is on a new line.
+
+```markdown
+<MyList>
+   {[
+      { name: "foo", age: 21 },
+      { name: "bar", age: 30 },
+   ]}
+</MyList>
+```
+
+Correct:
+
+The section is wrapped in `{}` so it all falss in the same block expression.
+   
+```markdown
+{<MyList>{[
+   { name: "foo", age: 21 },
+   { name: "bar", age: 30 },
+]}</MyList>}
+```
+
+Correct:
+
+All content is on one line.
+
+```markdown
+<MyList>{[{ name: "foo", age: 21 }]}</MyList>
+```
 
 ## 8 References
 
