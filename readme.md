@@ -2,6 +2,13 @@
 
 # MDX
 
+> 🪦 **Archived**: this document is not maintained.
+> This document was made jointly with `micromark`,
+> which was later also turned into `markdown-rs`.
+> At present,
+> I don’t have the bandwidth to maintain 2 reference parsers
+> *and* a spec.
+>
 > Markdown 💛 JSX
 >
 > This document is currently in progress.

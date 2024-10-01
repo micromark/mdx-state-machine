@@ -1,5 +1,6 @@
 {
   "name": "mdx-state-machine",
+  "private": true,
   "version": "0.0.0",
   "license": "MIT",
   "repository": "micromark/mdx-state-machine",
